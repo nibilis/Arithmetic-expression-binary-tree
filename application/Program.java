@@ -25,7 +25,7 @@ public class Program
         System.out.println(postfix); //TODO remove this
         //validating expression
         //TODO
-        //using the infix expression to create the tree`s nodes
+        //using the infix expression to create the tree`s nodes -- INCOMPLETE TODO
         int size = postfix.length();
         OperatorNode root = new OperatorNode(postfix.charAt(size-2));
         System.out.println(postfix.charAt(size-2));
@@ -101,7 +101,7 @@ public class Program
     public static boolean isOperator(char verify) {
     	return verify=='+' || verify=='-'||verify=='*'||verify=='/';
     }
-    public static void createTree(BaseNode<?> father, int index, String postfix) {
+    public static void createTree(BaseNode<?> father, int index, String postfix) { // INCOMPLETE TODO
     	if(isOperator(postfix.charAt(index-2))) {
     		System.out.println("operator");
     		if(father.getLeft() == null) {
