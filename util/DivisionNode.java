@@ -8,6 +8,7 @@ public class DivisionNode extends OperatorNode{
         setRight(null);
         setIsFull(false);
         setData('/');
+
     }
 
     //overriding the visit method

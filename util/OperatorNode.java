@@ -7,7 +7,7 @@ package util;
 
 public class OperatorNode extends BaseNode<Character> {
     //declaring atributes
-    private char data;
+    protected char data;
 
     //getter and setter methods
     public Character getData() {
