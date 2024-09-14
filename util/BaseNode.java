@@ -11,6 +11,7 @@ public class BaseNode<T> {
     private BaseNode<?> parent;
     private BaseNode<?> left;
     private BaseNode<?> right;
+    private boolean isFull;
 
     //constructor method
     public BaseNode() {
@@ -56,6 +57,14 @@ public class BaseNode<T> {
 			right.setParent(this);
 		
 		this.right = right;
+    }
+
+    public boolean getIsFull() {
+        return this.isFull;
+    }
+
+    public void setIsFull(boolean isFull) {
+        this.isFull = isFull;
     }
 
     //method that will be used to traverse and calculate the tree
