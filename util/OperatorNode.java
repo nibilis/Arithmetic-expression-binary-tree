@@ -7,7 +7,7 @@ package util;
 
 public class OperatorNode extends BaseNode<Character> {
     //declaring atributes
-    private char data;
+    protected char data;
 
     //constructor methods
     public OperatorNode() {
@@ -31,21 +31,5 @@ public class OperatorNode extends BaseNode<Character> {
 
     public void setData(char data) {
         this.data = data;
-    }
-
-    //overriding the base node method
-    //This method will return the calculation
-    //of all the nodes below, considering which
-    //operation is stored in the current node
-    @Override
-    public float visit() {
-        if(this.getData() == '+')
-            return getLeft().visit() + getRight().visit();
-        else if(this.getData() == '-')
-            return getLeft().visit() - getRight().visit();
-        else if(this.getData() == '*')
-            return getLeft().visit() * getRight().visit();
-        else
-            return getLeft().visit() / getRight().visit();
     }
 }
