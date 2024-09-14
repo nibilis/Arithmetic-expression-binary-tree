@@ -7,7 +7,7 @@ public class SubtractionNode extends OperatorNode{
         setLeft(null);
         setRight(null);
         setIsFull(false);
-        this.data = '-';
+        setData('-');
     }
 
     //overriding the visit method
