@@ -6,7 +6,8 @@ public class SumNode extends OperatorNode{
         setParent(null);
         setLeft(null);
         setRight(null);
-        this.data = '+';
+        setIsFull(false);
+        setData('+');
     }
 
     //overriding the visit method

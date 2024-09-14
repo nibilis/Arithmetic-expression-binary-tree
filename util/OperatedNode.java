@@ -14,6 +14,7 @@ public class OperatedNode extends BaseNode<Float> {
         setParent(null);
         setLeft(null);
         setRight(null);
+        setIsFull(true);
         this.data = ' ';
     }
 
@@ -21,6 +22,7 @@ public class OperatedNode extends BaseNode<Float> {
         setParent(null);
         setLeft(null);
         setRight(null);
+        setIsFull(true);
         this.data = data;
     }
 

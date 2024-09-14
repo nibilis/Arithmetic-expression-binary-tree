@@ -38,7 +38,7 @@ public class BinaryTree {
         inOrderTraversal(root);
     }
 
-    private void inOrderTraversal(BaseNode<?> root) {
+    private void inOrderTraversal(BaseNode<?> root) { //O(n)
         if(root != null) {
             inOrderTraversal(root.getLeft());
             System.out.print(root.getData() + " ");
@@ -51,7 +51,7 @@ public class BinaryTree {
     	preOrderTraversal(root);
     }
     
-    private void preOrderTraversal(BaseNode<?> root) {
+    private void preOrderTraversal(BaseNode<?> root) { //O(n)
         if(root != null) {
         	System.out.print(root.getData() + " ");
             preOrderTraversal(root.getLeft());
@@ -64,7 +64,7 @@ public class BinaryTree {
     	postOrderTraversal(root);
     }
     
-    private void postOrderTraversal(BaseNode<?> root) {
+    private void postOrderTraversal(BaseNode<?> root) { //O(n)
         if(root != null) {
             postOrderTraversal(root.getLeft());
             postOrderTraversal(root.getRight());
@@ -73,7 +73,45 @@ public class BinaryTree {
     }
 
     //method that solves the tree expression
-    public float solve() {
+    public float solve() { //O(n)
         return root.visit();
+    }
+
+    public void insert(BaseNode<?> node) {
+        insert(root, node);
+    }
+
+    //method that receives a current node and a
+    //node to be inserted and inserts the desired
+    //node into the tree. returns true if the insertion
+    //was successfull and false if not.
+    public boolean insert(BaseNode<?> currNode, BaseNode<?> node) {
+        //if the tree is empty, set the desired node as the root
+        if(this.isEmpty()) {
+            this.setRoot(node);
+        }
+
+        else if(currNode.getRight() == null) {
+            currNode.setRight(node);
+        }
+
+        else if(currNode.getRight().getIsFull() == false) {
+            insert(currNode.getRight(), node);
+        }
+
+        else if(currNode.getLeft() == null) {
+            currNode.setLeft(node);
+        }
+
+        else if(currNode.getLeft().getIsFull() == false) {
+            insert(currNode.getLeft(), node);
+        }
+        //both left and right are full
+        else {
+            currNode.setIsFull(true);
+            insert(currNode.getParent(), node);
+        }
+        
+        return true;
     }
 }

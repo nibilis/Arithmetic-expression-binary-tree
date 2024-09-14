@@ -9,21 +9,6 @@ public class OperatorNode extends BaseNode<Character> {
     //declaring atributes
     protected char data;
 
-    //constructor methods
-    public OperatorNode() {
-        setParent(null);
-        setLeft(null);
-        setRight(null);
-        this.data = ' ';
-    }
-
-    public OperatorNode(char data) {
-        setParent(null);
-        setLeft(null);
-        setRight(null);
-        this.data = data;
-    }
-
     //getter and setter methods
     public Character getData() {
         return this.data;
