@@ -6,32 +6,42 @@
 // References:
 // - https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html
 // - https://docs.oracle.com/javase/7/docs/api/java/lang/Float.html
+// - https://raj457036.github.io/Simple-Tools/prefixAndPostfixConvertor.html
 
 package application;
 
-import util.*;
-import java.util.Scanner;
+import java.util.List;
+
 import java.util.Stack;
+
+import java.util.Scanner;
+
+import util.*;
+
 
 public class Program
 {
-    public static void main(String[] args){
-        //creating binary tree
-    	BinaryTree tree = new BinaryTree();
-        //receiving expression
+    public static void main(String[] args) throws Exception{
         Scanner sc = new Scanner(System.in);
-        String infix = sc.nextLine();
-        String postfix = infixToPostfix(infix);
-        System.out.println(postfix); //TODO remove this
-        //validating expression
-        //TODO
-        //using the infix expression to create the tree`s nodes -- INCOMPLETE TODO
-        int size = postfix.length();
-        OperatorNode root = new OperatorNode(postfix.charAt(size-2));
-        System.out.println(postfix.charAt(size-2));
-        createTree(root, size-2, postfix);
-        System.out.println(root.getData());
-        System.out.println(root.getLeft());
+        System.out.println("Input Expression: ");
+        String input = sc.nextLine();
+    	
+        tokenizer tkz = new tokenizer(input);
+        
+        List<String> tokens = tkz.tokenize();
+
+        System.out.println("---------- toPostfix ------------");
+        Stack<String> postfix = new Stack<>();
+        postfix = infixToPostfix(tokens);
+        System.out.println(postfix);
+        System.out.println("-------------- TO TREE -----------");
+        BinaryTree tree = new BinaryTree();
+        makeTree(tree, postfix);
+        System.out.print("In order traversal: ");
+        tree.inOrderTraversal();
+        System.out.println();
+        System.out.println(tree.solve());
+        
     }
 
     //Method that receives no parameter and has
@@ -48,43 +58,33 @@ public class Program
         System.out.print(sb.toString());
     }
     
-    //turning the infix expression to postfix
-    public static String infixToPostfix(String infix) {
-    	//this will only work if the given expression has already been verified
-    	String number = "";
-    	String postfix = "";
-    	Stack<Character> stack = new Stack<Character>();
-    	
-    	for(int i = 0; i < infix.length(); i++) { // check each character in the String
-    		if(isOperator(infix.charAt(i))) { // if it`s an operator, add the numbers before it to the postfix variable (this only works if the expression is written correctly)
-    			postfix+=number;
-    			postfix+=" ";
-    			number="";
-    			if(stack.isEmpty() == false) { // check for the previous operators found in the String
-    				if(priorityCheck(stack.peek()) > priorityCheck(infix.charAt(i))) { // if the one at the top has a lower priority, add the stack to the postfix variable and then add the new operator to the empty stack
-    					while(stack.empty() == false) {
-    						postfix += stack.pop();
-    						postfix += " ";
-    					}
-    				}
-    			}
-    			stack.push(infix.charAt(i));
-    		}
-    		else {
-    			number+=infix.charAt(i); //if its not an operator then it`s a number. Doing like this will separate different numbers
-    		}
-    	}
-    	//adding the remaining numbers and operators:
-    	postfix+=number + " ";
-		while(stack.empty() == false) {
-			postfix += stack.pop();
-			postfix += " ";
-		}
-		
-    	return postfix;
-
-    }
-    public static int priorityCheck(char check) { //see the "priority level" of the character
+   // infix to postfix
+    
+   
+   public static Stack<String> infixToPostfix(List<String> tokens) {
+	   Stack<String> postfix = new Stack<>();
+	   Stack<String> operators = new Stack<>();
+	   for(int i = 0; i < tokens.size(); i++) {
+       		if(Character.isDigit(tokens.get(i).charAt(0))) {
+       			postfix.push(tokens.get(i));
+       		}
+       		else {
+       			if(operators.isEmpty() == false) {
+       				if(priorityCheck(operators.peek().charAt(0)) > priorityCheck(tokens.get(i).charAt(0))) {
+       					while(operators.isEmpty() == false) {
+       						postfix.push(operators.pop());
+       					}
+       				}
+       			}
+       			operators.push(tokens.get(i));
+       		}
+       }
+	   while(operators.isEmpty() == false) {
+		   postfix.push(operators.pop());
+	   }
+	   return postfix;
+   }
+   public static int priorityCheck(char check) { //see the "priority level" of the character
 		switch (check) {
 			case '+':
 			case '-':
@@ -92,23 +92,38 @@ public class Program
 			case '*':
 			case '/':
 				return 2;
-			case '^':
-			    return 3;
 			default:
 			    return 0;
 		}
 	}
-    public static boolean isOperator(char verify) {
-    	return verify=='+' || verify=='-'||verify=='*'||verify=='/';
-    }
-    public static void createTree(BaseNode<?> father, int index, String postfix) { // INCOMPLETE TODO
-    	if(isOperator(postfix.charAt(index-2))) {
-    		System.out.println("operator");
-    		if(father.getLeft() == null) {
-    			OperatorNode node = new OperatorNode(postfix.charAt(index-2));
-    			father.setLeft(node);
-    		}
-    	}
-    }
+   public static void makeTree(BinaryTree tree, Stack<String> postfix) {
+	   int size = postfix.size();
+       for(int i = 0; i < size; i++) {
+       	String current = postfix.pop();
+       	char currValue = current.charAt(0);
+       	switch(currValue) {
+       	case '+':
+       		SumNode sumN = new SumNode();
+       		tree.insert(sumN);
+       		break;
+       	case '-':
+       		SubtractionNode subN = new SubtractionNode();
+       		tree.insert(subN);
+       		break;
+       	case '*':
+       		MultiplicationNode mulN = new MultiplicationNode();
+       		tree.insert(mulN);
+       		break;
+       	case '/':
+       		DivisionNode divN = new DivisionNode();
+       		tree.insert(divN);
+       		break;
+       	default:
+       		Float result = Float.valueOf(current);
+       		OperatedNode opN = new OperatedNode(result);
+       		tree.insert(opN);
+       		break;
+       	}
+       }
+   }
 }
-
