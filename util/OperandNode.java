@@ -5,12 +5,12 @@
 
 package util;
 
-public class OperatedNode extends BaseNode<Float> {
+public class OperandNode extends BaseNode<Float> {
     //Declaring atributes
     private float data;
 
     //Constructor methods
-    public OperatedNode() {
+    public OperandNode() {
         setParent(null);
         setLeft(null);
         setRight(null);
@@ -18,7 +18,7 @@ public class OperatedNode extends BaseNode<Float> {
         this.data = ' ';
     }
 
-    public OperatedNode(float data) {
+    public OperandNode(float data) {
         setParent(null);
         setLeft(null);
         setRight(null);

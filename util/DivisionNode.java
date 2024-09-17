@@ -17,7 +17,7 @@ public class DivisionNode extends OperatorNode {
     //as the dividend and the right one as the divisor
     @Override
     public float visit() throws Exception {
-        if(getRight() instanceof OperatedNode) {
+        if(getRight() instanceof OperandNode) {
             if((Float) getRight().getData() == 0) {
                 throw new Exception("Error: Division by 0");
             }
