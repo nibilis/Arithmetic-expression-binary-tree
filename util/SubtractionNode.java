@@ -1,7 +1,7 @@
 package util;
 
 public class SubtractionNode extends OperatorNode{
-    //constructor method
+    //Constructor method
     public SubtractionNode() {
         setParent(null);
         setLeft(null);
@@ -10,12 +10,12 @@ public class SubtractionNode extends OperatorNode{
         setData('-');
     }
 
-    //overriding the visit method
+    //Overriding the visit method
     //this method receives no parameters
     //and returns the difference of the left node
     //and the right node
     @Override
-    public float visit() {
+    public float visit() throws Exception {
         return getLeft().visit() - getRight().visit();
     }
 }

@@ -6,21 +6,21 @@
 package util;
 
 public class BaseNode<T> {
-    //declaring atributes
+    //Declaring atributes
     private T data;
     private BaseNode<?> parent;
     private BaseNode<?> left;
     private BaseNode<?> right;
     private boolean isFull;
 
-    //constructor method
+    //Constructor method
     public BaseNode() {
         this.parent = null;
         this.left = null;
         this.right = null;
     }
 
-    //getter and setter methods
+    //Getter and setter methods
     public T getData() {
         return this.data;
     }
@@ -67,8 +67,8 @@ public class BaseNode<T> {
         this.isFull = isFull;
     }
 
-    //method that will be used to traverse and calculate the tree
-    public float visit() {
+    //Method that will be used to traverse and calculate the tree
+    public float visit() throws Exception {
         return Float.NaN;
     }
 }

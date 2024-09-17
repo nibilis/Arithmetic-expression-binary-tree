@@ -5,12 +5,12 @@
 
 package util;
 
-public class OperatedNode extends BaseNode<Float> {
-    //declaring atributes
+public class OperandNode extends BaseNode<Float> {
+    //Declaring atributes
     private float data;
 
-    //constructor methods
-    public OperatedNode() {
+    //Constructor methods
+    public OperandNode() {
         setParent(null);
         setLeft(null);
         setRight(null);
@@ -18,7 +18,7 @@ public class OperatedNode extends BaseNode<Float> {
         this.data = ' ';
     }
 
-    public OperatedNode(float data) {
+    public OperandNode(float data) {
         setParent(null);
         setLeft(null);
         setRight(null);
@@ -26,8 +26,7 @@ public class OperatedNode extends BaseNode<Float> {
         this.data = data;
     }
 
-    //getter and setter methods
-    //getter and setter methods
+    //Getter and setter methods
     public Float getData() {
         return this.data;
     }
@@ -37,7 +36,7 @@ public class OperatedNode extends BaseNode<Float> {
     }
 
     //Overriding the base node method
-    //This method will return the float
+    //this method will return the float
     //value stored in the current node
     @Override
     public float visit() {

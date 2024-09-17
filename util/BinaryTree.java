@@ -6,10 +6,10 @@
 package util;
 
 public class BinaryTree {
-    //declaring tree atributes
+    //Declaring tree atributes
     private BaseNode<?> root;
 
-    //constructor methods
+    //Constructor methods
     public BinaryTree() {
         this.root = null;
     }
@@ -18,7 +18,7 @@ public class BinaryTree {
         this.root = root;
     }
 
-    //getters and setters
+    //Getters and setters
     public BaseNode<?> getRoot() {
         return this.root;
     }
@@ -27,13 +27,13 @@ public class BinaryTree {
         this.root = root;
     }
 
-    //returns true if the tree is empty and false if not
+    //Returns true if the tree is empty and false if not
     public boolean isEmpty() { //O(1)
         return root == null;
     }
 
-    //tree traversals
-    //traverses the tree in-order (Left -> Node -> Right)
+    //Tree traversals
+    //Traverses the tree in-order (Left -> Node -> Right)
     public void inOrderTraversal() {
         inOrderTraversal(root);
     }
@@ -46,7 +46,7 @@ public class BinaryTree {
         }
     }
 
-    //traverses the tree in pre order (Node -> Left -> Right)
+    //Traverses the tree in pre order (Node -> Left -> Right)
     public void preOrderTraversal() {
     	preOrderTraversal(root);
     }
@@ -59,7 +59,7 @@ public class BinaryTree {
         }
     }
     
-    //traverses the tree in post order (Left -> Right -> Node)
+    //Traverses the tree in post order (Left -> Right -> Node)
     public void postOrderTraversal() {
     	postOrderTraversal(root);
     }
@@ -72,21 +72,26 @@ public class BinaryTree {
         }
     }
 
-    //method that solves the tree expression
+    //Method that solves the tree expression
     public float solve() { //O(n)
-        return root.visit();
+        try {
+            return root.visit();
+        } catch(Exception e) {
+            System.out.println(e);
+            return 0;
+        }
     }
 
     public void insert(BaseNode<?> node) {
         insert(root, node);
     }
 
-    //method that receives a current node and a
+    //Method that receives a current node and a
     //node to be inserted and inserts the desired
     //node into the tree. returns true if the insertion
     //was successfull and false if not.
     public boolean insert(BaseNode<?> currNode, BaseNode<?> node) {
-        //if the tree is empty, set the desired node as the root
+        //If the tree is empty, set the desired node as the root
         if(this.isEmpty()) {
             this.setRoot(node);
         }
@@ -106,7 +111,7 @@ public class BinaryTree {
         else if(currNode.getLeft().getIsFull() == false) {
             insert(currNode.getLeft(), node);
         }
-        //both left and right are full
+        //Both left and right are full
         else {
             currNode.setIsFull(true);
             insert(currNode.getParent(), node);

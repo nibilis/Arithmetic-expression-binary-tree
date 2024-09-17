@@ -1,7 +1,7 @@
 package util;
 
 public class SumNode extends OperatorNode{
-    //constructor method
+    //Constructor method
     public SumNode() {
         setParent(null);
         setLeft(null);
@@ -10,12 +10,12 @@ public class SumNode extends OperatorNode{
         setData('+');
     }
 
-    //overriding the visit method
+    //Overriding the visit method
     //this method receives no parameters
     //and returns the sum of the left and
     //right nodes
     @Override
-    public float visit() {
+    public float visit() throws Exception {
         return getLeft().visit() + getRight().visit();
     }
 }

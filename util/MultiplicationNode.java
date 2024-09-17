@@ -1,7 +1,7 @@
 package util;
 
 public class MultiplicationNode extends OperatorNode{
-    //constructor method
+    //Constructor method
     public MultiplicationNode() {
         setParent(null);
         setLeft(null);
@@ -10,12 +10,12 @@ public class MultiplicationNode extends OperatorNode{
         setData('*');
     }
 
-    //overriding the visit method
+    //Overriding the visit method
     //this method receives no parameters
     //and returns the product of the left
     //and right nodes
     @Override
-    public float visit() {
+    public float visit() throws Exception {
         return getLeft().visit() * getRight().visit();
     }
 }
