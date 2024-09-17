@@ -7,13 +7,15 @@
 // - https://docs.oracle.com/javase/8/docs/api/java/lang/StringBuilder.html
 // - https://docs.oracle.com/javase/7/docs/api/java/lang/Float.html
 // - https://raj457036.github.io/Simple-Tools/prefixAndPostfixConvertor.html
+// - https://www.w3schools.com/java/java_try_catch.asp
+// - https://www.w3schools.com/java/ref_output_printf.asp
 
 package application;
 
+import java.util.InputMismatchException;
+
 import java.util.List;
-
 import java.util.Stack;
-
 import java.util.Scanner;
 
 import util.*;
@@ -21,60 +23,135 @@ import util.*;
 
 public class Program
 {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+        //Creating variables
+        List<String> infixExpression = null;
+		BinaryTree tree = null;
+        int menuChoice = 0;
+        
+        //Declaring scanner object
         Scanner sc = new Scanner(System.in);
-        System.out.println("Input Expression: ");
+        
+		while(true) {
+			showMenu();
+			System.out.print("Type your choice: ");
+			
+			try {
+				menuChoice = sc.nextInt();
+			} catch(InputMismatchException e) {
+				menuChoice = 0;
+				sc.nextLine();
+			}
+            
+			switch(menuChoice) {
+				//Getting user input for an infix notation arithmetic expression
+				//and checking for errors
+				case 1:
+					infixExpression = writeExpression(sc);
+					
+					if(infixExpression == null) break;
+
+					try {
+						verifyInput(infixExpression);
+					} catch(Exception e) {
+						e.printStackTrace();
+						infixExpression = null;
+					}
+					tree = null;
+                    break;
+
+				//Creating the binary tree using the expression.
+				//If the user has not entered an expression before,
+				//show an error and returns to the menu
+				case 2:
+					if(infixExpression != null) {
+						tree = createBinaryTree(infixExpression);
+					}
+					else {
+						System.out.println("Insert an expression first!\n");
+					}
+					break;
+				
+				//Prints the binary tree containing the expression.
+				//If the user has not created the expression tree before,
+				//show an error and returns to the menu.
+				case 3:
+					if(tree != null) {
+						System.out.print("In order traversal: ");
+        				tree.inOrderTraversal();
+					}
+					else {
+						System.out.println("Create the tree first!\n");
+					}
+                    break;
+				
+				//Prints the result of the expression in the tree.
+				//If the user has not created the expression tree beore,
+				//show an error and returns to the menu.
+				case 4:
+					if(tree != null) {
+						System.out.printf("%.3f%n", tree.solve());
+					}
+					else {
+						System.out.println("Insert a tree first!\n");
+					}
+                    break;
+				
+				//Exits the program
+				case 5:
+					System.out.println("Exiting...");
+					return;
+				
+				//default option
+				default:
+					System.out.println("Invalid option!\n");
+                    break;
+			}
+		}
+		        
+    }
+
+	//Method that receives a Scanner object as a
+	//parameter and returns a String list containing
+	//user input separated by operator and numbers
+	public static List<String> writeExpression(Scanner sc) { //O(n)
+    	sc.nextLine();
+		System.out.println("Input Expression: ");
         String input = sc.nextLine();
     	
-        tokenizer tkz = new tokenizer(input);
-        
-        List<String> tokens = tkz.tokenize();
+        Tokenizer tkz = new Tokenizer(input);
 
-        System.out.println("---------- toPostfix ------------");
+        List<String> tokens = null;
+        
+        try {
+            tokens = tkz.tokenize();
+        } catch(Exception e) {
+            System.out.println(e);
+			tokens = null;
+        } 
+
+		return tokens;
+	}
+
+	//Method that receives a String list containing
+	//expression tokens and returns a BinaryTree object
+	//with the String list tokens.
+	public static BinaryTree createBinaryTree(List<String> tokens) { //O(n)
+		System.out.println("---------- toPostfix ------------");
         Stack<String> postfix = new Stack<>();
         postfix = infixToPostfix(tokens);
         System.out.println(postfix);
         System.out.println("-------------- TO TREE -----------");
         BinaryTree tree = new BinaryTree();
-        int size = postfix.size();
-        for(int i = 0; i < size; i++) {
-        	String current = postfix.pop();
-        	char currValue = current.charAt(0);
-        	switch(currValue) {
-        	case '+':
-        		SumNode sumN = new SumNode();
-        		tree.insert(sumN);
-        		break;
-        	case '-':
-        		SubtractionNode subN = new SubtractionNode();
-        		tree.insert(subN);
-        		break;
-        	case '*':
-        		MultiplicationNode mulN = new MultiplicationNode();
-        		tree.insert(mulN);
-        		break;
-        	case '/':
-        		DivisionNode divN = new DivisionNode();
-        		tree.insert(divN);
-        		break;
-        	default:
-        		Float result = Float.valueOf(current);
-        		OperatedNode opN = new OperatedNode(result);
-        		tree.insert(opN);
-        		break;
-        	}
-        }
-        System.out.print("In order traversal: ");
-        tree.inOrderTraversal();
-        System.out.println();
-        System.out.println(tree.solve());
-        
-    }
+        makeTree(tree, postfix);
+		System.out.println("---------- TREE CREATED ----------");
+		return tree;
+	}
 
     //Method that receives no parameter and has
 	//no return. Only used to show the menu
 	//to the user
-    public static void showMenu(){
+	public static void showMenu(){
         StringBuilder sb = new StringBuilder();
         sb.append("===================== MENU =====================\n");
         sb.append("1. Write the desired infix arithmetic expression\n");
@@ -85,33 +162,44 @@ public class Program
         System.out.print(sb.toString());
     }
     
-   // infix to postfix
-    
-   
-   public static Stack<String> infixToPostfix(List<String> tokens) {
-	   Stack<String> postfix = new Stack<>();
-	   Stack<String> operators = new Stack<>();
-	   for(int i = 0; i < tokens.size(); i++) {
+    //Infix to postfix
+    public static Stack<String> infixToPostfix(List<String> tokens) {
+		Stack<String> postfix = new Stack<>();
+		Stack<String> operators = new Stack<>();
+		for(int i = 0; i < tokens.size(); i++) {
+			System.out.println("==== STACK ==== " + (i-1));
+			System.out.println(operators);
+			System.out.println("==== POSTFIX ==== " + (i-1));
+			System.out.println(postfix + "\n\n");
        		if(Character.isDigit(tokens.get(i).charAt(0))) {
        			postfix.push(tokens.get(i));
        		}
+			else if(tokens.get(i).charAt(0) == '(') {
+				operators.push("(");
+			}
+			else if(tokens.get(i).charAt(0) == ')') {
+				while(!operators.isEmpty() && operators.peek() != "(") {
+					postfix.push(operators.pop());
+				}
+				operators.pop();
+			}
        		else {
-       			if(operators.isEmpty() == false) {
-       				if(priorityCheck(operators.peek().charAt(0)) > priorityCheck(tokens.get(i).charAt(0))) {
-       					while(operators.isEmpty() == false) {
-       						postfix.push(operators.pop());
-       					}
+       				while(!operators.isEmpty() && priorityCheck(operators.peek().charAt(0)) >= priorityCheck(tokens.get(i).charAt(0))) {
+       					postfix.push(operators.pop());
        				}
-       			}
        			operators.push(tokens.get(i));
        		}
        }
+
 	   while(operators.isEmpty() == false) {
-		   postfix.push(operators.pop());
+		    postfix.push(operators.pop());
 	   }
+
 	   return postfix;
-   }
-   public static int priorityCheck(char check) { //see the "priority level" of the character
+    }
+
+	//Check the "priority level" of the character
+    public static int priorityCheck(char check) { //O(1)
 		switch (check) {
 			case '+':
 			case '-':
@@ -123,5 +211,91 @@ public class Program
 			    return 0;
 		}
 	}
-   
+    
+    public static void makeTree(BinaryTree tree, Stack<String> postfix) {
+	    int size = postfix.size();
+        for(int i = 0; i < size; i++) {
+			String current = postfix.pop();
+			char currValue = current.charAt(0);
+			switch(currValue) {
+				case '+':
+					SumNode sumN = new SumNode();
+					tree.insert(sumN);
+					break;
+
+				case '-':
+					SubtractionNode subN = new SubtractionNode();
+					tree.insert(subN);
+					break;
+
+				case '*':
+					MultiplicationNode mulN = new MultiplicationNode();
+					tree.insert(mulN);
+					break;
+
+				case '/':
+					DivisionNode divN = new DivisionNode();
+					tree.insert(divN);
+					break;
+
+				default:
+					Float result = Float.valueOf(current);
+					OperandNode opN = new OperandNode(result);
+					tree.insert(opN);
+					break;
+			}
+        }
+    }
+
+	public static void verifyInput(List<String> tokens) throws Exception { //O(n.m)
+		Stack<Character> s = new Stack<>();
+		String currChar;
+		boolean hasNumber = false;
+		boolean controlVariable = false; // true - last string was number // false - last string was operator
+		int i = 0;
+		for(i = 0; i < tokens.size(); i++) {
+			currChar = tokens.get(i);
+			if(currChar.charAt(0) == '(') {
+				s.push(')');
+			}
+			else if(currChar.charAt(0) == ')') {
+				if(!s.isEmpty()) {
+					if(s.pop() != ')'){
+						throw new Exception("Parenthesis mismatch");
+					}
+				}
+				else {
+					throw new Exception("Parenthesis mismatch");
+				}
+			}
+			else if (Character.isDigit(currChar.charAt(0)) && controlVariable == false) {
+				int j = 0;
+				hasNumber = true;
+				while(j < currChar.length()) {
+					if(!Character.isDigit(currChar.charAt(j))  && currChar.charAt(j) != '.') {
+						throw new Exception("Invalid number: " + currChar);
+					}
+					j++;
+				}
+				controlVariable = true;
+				continue;
+			}
+			else if (currChar.charAt(0) == '+' ||currChar.charAt(0) == '-' || currChar.charAt(0) == '*' || currChar.charAt(0) == '/' && controlVariable == true) {
+				controlVariable = false;
+				continue;
+			}
+			else {
+				throw new Exception("Invalid order or character!");
+			}
+		} 
+		if(!Character.isDigit(tokens.get(i-1).charAt(0)) && tokens.get(i-1).charAt(0) != ')'){
+			throw new Exception("Invalid expression!");
+		}
+		if(!s.isEmpty()){
+			throw new Exception("Parenthesis mismatch!");
+		}
+		if(!hasNumber) {
+			throw new Exception("Expression need to have at least 1 number!");
+		}
+    }
 }
