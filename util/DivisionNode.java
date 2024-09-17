@@ -1,7 +1,7 @@
 package util;
 
-public class DivisionNode extends OperatorNode{
-    //constructor method
+public class DivisionNode extends OperatorNode {
+    //Constructor method
     public DivisionNode() {
         setParent(null);
         setLeft(null);
@@ -11,12 +11,17 @@ public class DivisionNode extends OperatorNode{
 
     }
 
-    //overriding the visit method
+    //Overriding the visit method
     //this method receives no parameters and
     //returns the quotient using the left node
     //as the dividend and the right one as the divisor
     @Override
-    public float visit() {
+    public float visit() throws Exception {
+        if(getRight() instanceof OperatedNode) {
+            if((Float) getRight().getData() == 0) {
+                throw new Exception("Error: Division by 0");
+            }
+        }
         return getLeft().visit() / getRight().visit();
     }
 }
