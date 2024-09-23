@@ -3,7 +3,7 @@
 //  - Natan Moreira Passos, RA: 10417916
 //  - Nicolas Henriques de Almeida, RA: 10418357
 
-package util;
+package dataStructures.nodes;
 
 public class BaseNode<T> {
     //Declaring atributes
@@ -15,9 +15,11 @@ public class BaseNode<T> {
 
     //Constructor method
     public BaseNode() {
+        this.data = null;
         this.parent = null;
         this.left = null;
         this.right = null;
+        isFull = false;
     }
 
     //Getter and setter methods

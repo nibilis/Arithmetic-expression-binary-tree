@@ -3,7 +3,7 @@
 //  - Natan Moreira Passos, RA: 10417916
 //  - Nicolas Henriques de Almeida, RA: 10418357
 
-package util;
+package dataStructures.nodes;
 
 public class OperandNode extends BaseNode<Float> {
     //Declaring atributes

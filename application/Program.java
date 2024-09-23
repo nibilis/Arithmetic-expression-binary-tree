@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Stack;
 import java.util.Scanner;
 
-import util.*;
-
+import dataStructures.nodes.*;
+import dataStructures.BinaryTree;
+import util.Tokenizer;
 
 public class Program
 {
