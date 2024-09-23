@@ -36,6 +36,7 @@ public class Program
 			showMenu();
 			System.out.print("Type your choice: ");
 			
+			//Handling input mismatch exception
 			try {
 				menuChoice = sc.nextInt();
 			} catch(InputMismatchException e) {
@@ -66,6 +67,7 @@ public class Program
 				case 2:
 					if(infixExpression != null) {
 						tree = createBinaryTree(infixExpression);
+						System.out.println("Tree created successfully!");
 					}
 					else {
 						System.out.println("Insert an expression first!\n");
@@ -77,8 +79,13 @@ public class Program
 				//show an error and returns to the menu.
 				case 3:
 					if(tree != null) {
-						System.out.print("In order traversal: ");
+						System.out.print("Pre-order traversal: ");
+        				tree.preOrderTraversal();
+						System.out.print("\nIn order traversal: ");
         				tree.inOrderTraversal();
+						System.out.print("\nPost-order traversal: ");
+        				tree.postOrderTraversal();
+						System.out.println();
 					}
 					else {
 						System.out.println("Create the tree first!\n");
@@ -90,7 +97,7 @@ public class Program
 				//show an error and returns to the menu.
 				case 4:
 					if(tree != null) {
-						System.out.printf("%.3f%n", tree.solve());
+						System.out.printf("Result: %.3f%n", tree.solve());
 					}
 					else {
 						System.out.println("Insert a tree first!\n");
@@ -116,7 +123,7 @@ public class Program
 	//user input separated by operator and numbers
 	public static List<String> writeExpression(Scanner sc) { //O(n)
     	sc.nextLine();
-		System.out.println("Input Expression: ");
+		System.out.print("Input Expression: ");
         String input = sc.nextLine();
     	
         Tokenizer tkz = new Tokenizer(input);
@@ -137,14 +144,10 @@ public class Program
 	//expression tokens and returns a BinaryTree object
 	//with the String list tokens.
 	public static BinaryTree createBinaryTree(List<String> tokens) { //O(n)
-		System.out.println("---------- toPostfix ------------");
         Stack<String> postfix = new Stack<>();
         postfix = infixToPostfix(tokens);
-        System.out.println(postfix);
-        System.out.println("-------------- TO TREE -----------");
         BinaryTree tree = new BinaryTree();
-        makeTree(tree, postfix);
-		System.out.println("---------- TREE CREATED ----------");
+        createTree(tree, postfix);
 		return tree;
 	}
 
@@ -162,15 +165,14 @@ public class Program
         System.out.print(sb.toString());
     }
     
-    //Infix to postfix
+    //Method that receives a list containing an
+	//infix expression, transforms said expression
+	//into infix notation and inserts it into a stack.
+	//Returns a String stack with the infix expression
     public static Stack<String> infixToPostfix(List<String> tokens) {
 		Stack<String> postfix = new Stack<>();
 		Stack<String> operators = new Stack<>();
 		for(int i = 0; i < tokens.size(); i++) {
-			System.out.println("==== STACK ==== " + (i-1));
-			System.out.println(operators);
-			System.out.println("==== POSTFIX ==== " + (i-1));
-			System.out.println(postfix + "\n\n");
        		if(Character.isDigit(tokens.get(i).charAt(0))) {
        			postfix.push(tokens.get(i));
        		}
@@ -212,7 +214,11 @@ public class Program
 		}
 	}
     
-    public static void makeTree(BinaryTree tree, Stack<String> postfix) {
+	//This method receives a binary tree and a 
+	//string stack containing a postfix expression.
+	//It pops the stack and inserts its elements in
+	//the tree. Doesnt return anything
+    public static void createTree(BinaryTree tree, Stack<String> postfix) {
 	    int size = postfix.size();
         for(int i = 0; i < size; i++) {
 			String current = postfix.pop();
