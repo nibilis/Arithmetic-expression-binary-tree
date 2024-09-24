@@ -287,7 +287,7 @@ public class Program
 				controlVariable = true;
 				continue;
 			}
-			else if (currChar.charAt(0) == '+' ||currChar.charAt(0) == '-' || currChar.charAt(0) == '*' || currChar.charAt(0) == '/' && controlVariable == true) {
+			else if ((currChar.charAt(0) == '+' ||currChar.charAt(0) == '-' || currChar.charAt(0) == '*' || currChar.charAt(0) == '/') && controlVariable == true) {
 				controlVariable = false;
 				continue;
 			}
