@@ -51,12 +51,15 @@ public class Program
 				case 1:
 					infixExpression = writeExpression(sc);
 					
-					if(infixExpression == null) break;
+					if(infixExpression == null) {
+						System.out.println("Invalid Expression!");
+						break;
+					}
 
 					try {
 						verifyInput(infixExpression);
 					} catch(Exception e) {
-						e.printStackTrace();
+						System.out.println(e);
 						infixExpression = null;
 					}
 					tree = null;
@@ -128,6 +131,10 @@ public class Program
         String input = sc.nextLine();
     	
         Tokenizer tkz = new Tokenizer(input);
+
+		if(tkz.isEmpty()) {
+			return null;
+		}
 
         List<String> tokens = null;
         
