@@ -51,17 +51,19 @@ public class Program
 				case 1:
 					infixExpression = writeExpression(sc);
 					
-					if(infixExpression == null) {
-						System.out.println("Invalid Expression!");
-						break;
-					}
+					if(infixExpression == null) break;
 
 					try {
 						verifyInput(infixExpression);
-					} catch(Exception e) {
-						System.out.println(e);
-						infixExpression = null;
 					}
+					catch(IndexOutOfBoundsException e) {
+						infixExpression = null;
+						System.out.println("Empty expression");
+					}
+					catch(Exception e) {
+						infixExpression = null;
+						System.out.println(e);
+					} 
 					tree = null;
                     break;
 
@@ -131,10 +133,6 @@ public class Program
         String input = sc.nextLine();
     	
         Tokenizer tkz = new Tokenizer(input);
-
-		if(tkz.isEmpty()) {
-			return null;
-		}
 
         List<String> tokens = null;
         
